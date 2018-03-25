@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script src="index.js"></script>
 </head>
 <!--Prueba git-->
 
@@ -21,19 +22,21 @@
                     <h3>Manual</h3>
                     <div>
                         <label>Introduzca numero de filas: </label>
-                        <input type="number" value="4">
+                        <input type="number" id="rows" value="4">
                     </div>
                     <div>
                         <label>Introduzca numero de columnas: </label>
-                        <input type="number" value="4">
+                        <input type="number" id="cols" value="4">
                     </div>
                     <button class="btn btn-primary" id="generateTable">Generar tabla</button>
                 </div>
                 <hr>
                 <div class="c2">
                     <h3>Archivo</h3>
-                    <label>Rellenar tabla con archivo .txt: </label>
-                    <input  class="form-input" type="file" class="btn">
+                    <label>Rellenar titulos con archivo .txt: </label>
+                    <input class="form-input" type="file" id="file1" class="btn">
+                    <label>Rellenar contenido con archivo .txt: </label>
+                    <input class="form-input" type="file" id="file2" class="btn">
                     <button class="btn btn-primary" id="fill">Rellenar</button>
                 </div>
             </div>
@@ -41,9 +44,10 @@
             <div class="col-md-10" id="bodyRight">
                 <h1>Tabla</h1>
                 <hr>
-                <table>
+                <div class="container" id="tableC">
+                    
+                </div>
 
-                </table>
             </div>
         </div>
         <div class="row" id="resultado">
@@ -56,7 +60,7 @@
                     halo
                 </div>
                 <div class="resultFondo">
-                    
+
                 </div>
             </div>
 
