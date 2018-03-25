@@ -3,6 +3,7 @@ $(() =>{
     $("#generateTable").on("click", createEmptyTable);
     $("#resultado").hide();
     $("#resBtn").on("click", showHideResult);
+    createEmptyTable();
 })
 
 function readFiles(event){
