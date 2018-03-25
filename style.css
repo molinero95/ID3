@@ -1,0 +1,58 @@
+body{
+    width: 100%;
+}
+#fondoMenu{
+    background-color: black;
+}
+#bodyLeft {
+    position: absolute;
+    display: flex;
+    justify-content: inherit ;
+    flex-direction: column;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background: grey;
+    border-right: black solid 3px;
+    position: relative;
+    height: 100%;
+}
+.c1 {
+    padding-left: 2em;
+    text-align: right;
+}
+.c1 > button{
+    float: right ;
+}
+.c1 input {
+    width: 2.5rem;
+}
+.c2{
+    display: flex;
+    flex-direction: column;
+    padding-right: 2em;
+
+}
+.c2 > button{
+    margin-top: 1em;
+    float: right;
+    position: relative;
+}
+
+
+.row{
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+hr{
+    border: 2px solid;
+    width: 100%;
+    height: 10px;
+}
+
+#bodyRight{
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+
