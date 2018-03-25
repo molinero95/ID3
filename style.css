@@ -21,8 +21,10 @@
     padding-bottom: 1em;
     background: lightgray;
     border-right: black solid 3px;
-    height: 100%;
+    min-height: 80%;
+    height: 80%;
     position: relative;
+    overflow: auto;
 }
 label{
     padding-right: 5px;
