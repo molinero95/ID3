@@ -151,3 +151,10 @@ tr{
     font-weight: bold;
     padding: 0rem;
 }
+
+#resBtn{
+    position: fixed;
+    top: 10px;
+    right: 5px;
+    padding: 5px;
+}

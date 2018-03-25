@@ -1,6 +1,8 @@
 $(() =>{
     $("#fill").on("click", readFiles);
     $("#generateTable").on("click", createEmptyTable);
+    $("#resultado").hide();
+    $("#resBtn").on("click", showHideResult);
 })
 
 function readFiles(event){
@@ -148,4 +150,13 @@ function checkIfCorrect(title, content) {
     if(content.length % title.length === 0)
         return true;
     return false;
+}
+
+function showHideResult(){
+    let div = $("#resultado");
+    console.log(div);
+    if(!div.is(":visible"))
+        div.show();
+    else
+        div.hide();
 }
