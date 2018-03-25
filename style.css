@@ -1,34 +1,55 @@
-body{
+ body{
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    height: 100%;
 }
+
+.alturaT{
+    height: 100%;
+}
+
 #fondoMenu{
     background-color: black;
 }
 #bodyLeft {
-    position: absolute;
     display: flex;
     justify-content: inherit ;
     flex-direction: column;
     padding-top: 1em;
     padding-bottom: 1em;
-    background: grey;
+    background: lightgray;
     border-right: black solid 3px;
-    position: relative;
     height: 100%;
+    position: relative;
+}
+label{
+    padding-right: 5px;
 }
 .c1 {
-    padding-left: 2em;
-    text-align: right;
 }
 .c1 > button{
     float: right ;
 }
+.c1 label{
+    width: 14rem;
+}
 .c1 input {
     width: 2.5rem;
+}
+
+#generateTable {
+    margin-top: 5px;
+    width: 100%;
+}
+#fill{
+    width: 100%;
 }
 .c2{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     padding-right: 2em;
 
 }
@@ -36,6 +57,9 @@ body{
     margin-top: 1em;
     float: right;
     position: relative;
+}
+.c2 > input{
+    width: 30px;
 }
 
 
@@ -56,3 +80,49 @@ hr{
 }
 
 
+#resultado{
+    position: absolute;
+    bottom: 0px;
+    height: 200px;
+    width: 100%;
+    background: #959595;
+    color: white;
+    
+}
+
+.borderTWhite{
+    width: 100%;
+    height: 3rem;
+    padding: 0;
+    margin: 0;
+
+    border-bottom: white solid 1px;
+    border-top:black solid 3px;
+}
+
+#resultText{
+    height: 100%;
+    width: 100%;
+    background: white;
+}
+
+.title{
+    padding-left: 2rem;
+    padding-top: 3px;
+    background: #959595;
+    color: black;
+}
+
+.resultFondo{
+    background: black;
+}
+
+.resultNoTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    top: 3rem;
+    width: 100%;
+    height: 70%;
+}

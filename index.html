@@ -10,37 +10,56 @@
         crossorigin="anonymous"></script>
 </head>
 <!--Prueba git-->
+
 <body>
     <div id="body" class="container-fluid">
-        <div class="row">
-            <div class="col-md-3" id="bodyLeft">
+        <div class="row alturaT">
+            <div class="col-md-2" id="bodyLeft">
                 <h1>Opciones</h1>
                 <hr>
-                    <div class="c1">
-                            <div>
-                                <label>Introduzca numero de filas: </label>
-                                <input  type="number" value="4">
-                            </div>
-                            <div>
-                                <label>Introduzca numero de columnas: </label>
-                                <input type="number" value="4">
-                            </div>
-                            <button class="btn">Generar tabla</button>
-                        </div>
-                        <hr>
-                        <div class="c2">
-                            <label>Rellenar tabla con .txt: </label>
-                            <input type="file" class="btn">
-                            <button class="btn">Rellenar</button>
-                        </div>
+                <div class="c1">
+                    <h3>Manual</h3>
+                    <div>
+                        <label>Introduzca numero de filas: </label>
+                        <input type="number" value="4">
+                    </div>
+                    <div>
+                        <label>Introduzca numero de columnas: </label>
+                        <input type="number" value="4">
+                    </div>
+                    <button class="btn btn-primary" id="generateTable">Generar tabla</button>
+                </div>
+                <hr>
+                <div class="c2">
+                    <h3>Archivo</h3>
+                    <label>Rellenar tabla con archivo .txt: </label>
+                    <input  class="form-input" type="file" class="btn">
+                    <button class="btn btn-primary" id="fill">Rellenar</button>
+                </div>
             </div>
             <!--Aqui ira la tabla-->
-            <div class="col-md-9" id="bodyRight">
+            <div class="col-md-10" id="bodyRight">
                 <h1>Tabla</h1>
+                <hr>
                 <table>
-                    
+
                 </table>
             </div>
+        </div>
+        <div class="row" id="resultado">
+            <h3 class="title borderTWhite">Resultado: </h3>
+            <div class="resultNoTitle">
+                <div class="resultFondo">
+
+                </div>
+                <div class="col-md-11" id="resultText">
+                    halo
+                </div>
+                <div class="resultFondo">
+                    
+                </div>
+            </div>
+
         </div>
     </div>
 
