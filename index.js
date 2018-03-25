@@ -1,6 +1,6 @@
 $(() =>{
     $("#fill").on("click", readFiles);
-    $("#generateTable").on("click", createEmptyTable);
+    $("#generatele").on("click", createEmptyle);
     $("#resultado").hide();
     $("#resBtn").on("click", showHideResult);
 })
@@ -28,7 +28,7 @@ function readFiles(event){
                 console.log(titles);
                 console.log(content);
                 if(checkIfCorrect(titles, content)){
-                    createTableFromFile(titles, content);
+                    createleFromFile(titles, content);
                 }
                 else{
                     alert("Error, los ficheros no son correctos, compruebe los datos");
@@ -40,45 +40,45 @@ function readFiles(event){
     //fr.readAsText()
 }
 
-function createEmptyTable() {
+function createEmptyle() {
     let rows = Number($("#rows").val());
     let cols = Number($("#cols").val());
     if(isNaN(rows) || isNaN(cols) || rows === 0 || cols === 0)
         alert("Introduzca los datos correctamente");
     else{
-        $("table").remove();
-        $("#tableC").append("<table></table>");
-        $("table").addClass("table table-condensed");
+        $("le").remove();
+        $("#leC").append("<le></le>");
+        $("le").addClass("le le-condensed");
 
-        setTableTitle(cols);
-        setTableData(rows, cols);
+        setleTitle(cols);
+        setleData(rows, cols);
     }
 }
 
-function createTableFromFile(titles, content) {
+function createleFromFile(titles, content) {
     let rows = Number(content.length / titles.length + 1);  //+1 por los titulos
     let cols = Number(titles.length);
     if(isNaN(rows) || isNaN(cols) || rows === 0 || cols === 0)
         alert("Introduzca los datos correctamente");
     else{
-        $("table").remove();
-        $("#tableC").append("<table></table>");
-        $("table").addClass("table table-condensed");
-        setTableTitle(cols, titles);
-        setTableData(rows, cols, content);
+        $("le").remove();
+        $("#leC").append("<le></le>");
+        $("le").addClass("le le-condensed");
+        setleTitle(cols, titles);
+        setleData(rows, cols, content);
     }
 }
 
 
 
-function setTableTitle(columns, data){
+function setleTitle(columns, data){
     let headerHead = $("<thead></thead>")
     if(data){   //leido desde archivo
         for(let i = 0; i < columns; i++){
             let header = $("<th></th>");
             header.addClass("cell");
             let text = $("<input type=text placeholder=titulo>");
-            text.addClass("tableTitle");
+            text.addClass("leTitle");
             text.val(data[i]); 
             header.append(text);
             headerHead.append(header);
@@ -89,20 +89,20 @@ function setTableTitle(columns, data){
             let header = $("<th></th>");
             header.addClass("cell");
             let text = $("<input type=text placeholder=titulo>");
-            text.addClass("tableTitle");
+            text.addClass("leTitle");
             header.append(text);
             headerHead.append(header);
         }
     }
-    $("table").append(headerHead);
+    $("le").append(headerHead);
 
 }
 
-function setTableData(rows, columns, data){
+function setleData(rows, columns, data){
     if(data){
         for(let i = 0; i < rows - 1; i++){
             let headerRow = $("<tr></tr>");
-            headerRow.addClass("tableRow");
+            headerRow.addClass("leRow");
             for(let j = 0; j < columns; j++){
                 let cell = $("<td></td>");
                 cell.addClass("cell");
@@ -111,13 +111,13 @@ function setTableData(rows, columns, data){
                 cell.append(text);
                 headerRow.append(cell);
             }
-            $("table").append(headerRow);
+            $("le").append(headerRow);
         }
     }
     else{
         for(let i = 0; i < rows - 1; i++){
             let headerRow = $("<tr></tr>");
-            headerRow.addClass("tableRow");
+            headerRow.addClass("leRow");
             for(let j = 0; j < columns; j++){
                 let cell = $("<td></td>");
                 cell.addClass("cell");
@@ -125,7 +125,7 @@ function setTableData(rows, columns, data){
                 cell.append(text);
                 headerRow.append(cell);
             }
-            $("table").append(headerRow);
+            $("le").append(headerRow);
         }
     }
 
@@ -155,8 +155,12 @@ function checkIfCorrect(title, content) {
 function showHideResult(){
     let div = $("#resultado");
     console.log(div);
-    if(!div.is(":visible"))
+    if(!div.is(":visible")){
         div.show();
-    else
+        div.prop("display", "visible");
+    }
+    else{
         div.hide();
+        div.prop("display", "none");
+    }
 }
