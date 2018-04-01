@@ -3,14 +3,15 @@ $(() => {
     $("#generateTable").on("click", createEmptyTable);
     $("#resultado").hide();
     $("#resBtn").on("click", showHideResult);
-    createEmptyTable();
     $("#plusRBtn").on("click", addRow);
     $("#plusCBtn").on("click", addColumn);
     $("#minRBtn").on("click", delRow);
     $("#minCBtn").on("click", delColumn);
-
     createEmptyTable();
 })
+
+let titles;
+let content;
 
 function readFiles(event) {
     let file1 = $("#file1").prop("files")[0];
@@ -30,8 +31,8 @@ function readFiles(event) {
             fr.readAsText(file2);
             fr.onload = function () {
                 contentStr = this.result;
-                let titles = parse(titlesStr);
-                let content = parse(contentStr);
+                titles = parse(titlesStr);
+                content = parse(contentStr);
                 console.log(titles);
                 console.log(content);
                 if (checkIfCorrect(titles, content)) {
@@ -128,7 +129,7 @@ function setTableData(rows, columns, data) {
                 let cell = $("<td></td>");
                 cell.addClass("cell");
                 let text = $("<input type=text placeholder=Dato>");
-                text.val(data[i * j + j]);
+                text.val(data[i * columns + j]);
                 cell.append(text);
                 headerRow.append(cell);
             }
@@ -226,6 +227,12 @@ function showHideResult() {
     if (!div.is(":visible")) {
         div.show();
         div.prop("display", "visible");
+        if(!titles || !content)
+            alert("esto ira en la consola");
+            //mostrar texto en resultado, usar funcion
+        else {
+            let id3 = new Algorithm(titles, content);
+        }
     }
     else {
         div.hide();
