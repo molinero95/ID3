@@ -33,8 +33,6 @@ function readFiles(event) {
                 contentStr = this.result;
                 titles = parse(titlesStr);
                 content = parse(contentStr);
-                console.log(titles);
-                console.log(content);
                 if (checkIfCorrect(titles, content)) {
                     createTableFromFile(titles, content);
                 }
@@ -223,7 +221,6 @@ function checkIfCorrect(title, content) {
 }
 function showHideResult() {
     let div = $("#resultado");
-    console.log(div);
     if (!div.is(":visible")) {
         div.show();
         div.prop("display", "visible");

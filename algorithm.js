@@ -41,9 +41,9 @@ class Algorithm {
 
     //Para obtener P necesitamos que sea si o sí el resultado
     //para cada fila obtenemos si si o si no y aumentamos el valor de numerador cuando corresponde y denom siempre para cada key
-    getP() {
+    getP(parsedData) {
         let p = {};
-        this.parsedData.forEach(elem => {
+        parsedData.forEach(elem => {
             Object.keys(elem).forEach(key => {
                 let value = elem[key];
                 if (key !== this.resultName) {
@@ -110,16 +110,137 @@ class Algorithm {
     }
 
     start() {
-        let p = this.getP(); //calculamos la p
+        let min = this.doID3(this.parsedData);
+        let branches = this.getBranchesFromMin(min, this.parsedData);
+        this.tree = {};
+        this.tree[min] = this.setTree(branches, min, this.parsedData);
+        let position = [];  //almacenamos las claves del arbol para llegar a rec
+        let parsedData = this.chekIfRecExists(this.tree, position); 
+        position = position.reverse();
+        while(parsedData){
+            let min = this.doID3(parsedData);
+            let branches = this.getBranchesFromMin(min, parsedData);
+            let treeBranch = this.setTree(branches, min, parsedData);
+            this.setATreeBranchInPosition(this.tree, treeBranch, position)
+            position = [];
+            parsedData = this.chekIfRecExists(this.tree, position);
+            position = position.reverse();
+        }
+        console.log(this.tree);
+    }
+
+    doID3(parsedData){
+        let p = this.getP(parsedData);
         let n = this.getN(p);
         let r = this.getR(p, n);
         let merit = {};
+        let min = null;
         Object.keys(p).forEach(elem => {
             merit[elem] = this.getMerit(r[elem], p[elem], n[elem]);
+            if(min === null)
+                min = elem;
+            else if(merit[min] > merit[elem]){
+                min = elem;
+            }
         });
-        //ahora que tenemos el merito, del menor calculamos sus ramas -> comprobamos si son todos si, o no y si 
-        //tiene sis y noes recursividad
-        
+        return min;
+    }
+
+    setATreeBranchInPosition(treePosition, treeBranch, position){
+        if(position.length > 1){    //accedemos a la posicion
+            let key = position.pop();
+            this.setATreeBranchInPosition(treePosition[key], treeBranch, position);
+        }
+        else if(position.length == 1){
+            let key = position.pop();
+            treePosition[key] = treeBranch
+        }
+    }
+
+    getBranchesFromMin(min, parsedData){
+        let branches = {};
+        parsedData.forEach(data => {
+            let res = data[this.resultName];
+            let dat = [data[min]];
+            if(!branches[dat])
+                branches[dat] = {};
+            if(!branches[dat][res]){
+                branches[dat][res] = 0;
+                branches[dat][res]++;
+            }
+        });
+        return branches;
+    }
+
+    //Vamos generando el arbol y borrando los elementos de parsedData
+    //Vamos a añadir un objeto a los rec
+    setTree(branches, min, parsedData){
+        let res = {};
+        let keys = Object.keys(branches);
+        keys.forEach((k, index) => {
+            let result = Object.keys(branches[k]);
+            if(result.length > 1){
+                res[k] = {};
+                res[k].parsedData = this.setNewParsedData(min, k, result[0], parsedData); 
+                res[k].rec = true;
+            }
+            else //length == 1 -> o si o no
+                res[k] = result[0];
+            
+        });
+        return res;
+    }
+
+    setNewParsedData(key, value, res, parsedData){
+        let result = [];
+        parsedData.forEach((data, index) => {
+            if(data[this.resultName] !== res || data[key] !== value){
+                let dataKeys = Object.keys(data);
+                let pushThis = {};
+                dataKeys.forEach(dataKey => {
+                    if(dataKey !== key)
+                        pushThis[dataKey] = data[dataKey];
+                })
+                result.push(pushThis);
+            }
+        });
+        return result;
+    }
+
+    //Recorremos el arbol, y para quellos que tengan el atributo rec a true devolvemos los datos preparados
+    chekIfRecExists(object, position){
+        if(typeof(object) !== "object")
+            return false;
+        else{
+            let keys = Object.keys(object);
+            let i = 0;
+            let found = false;
+            while(i < keys.length && !found) {
+                let item = object[keys[i]];
+                if(item.rec){
+                    position.push(keys[i]);
+                    found = this.getDataFromObject(item);
+                    item.rec = false;
+                }
+                else{
+                    position.push(keys[i]);
+                    found = this.chekIfRecExists(item, position);
+                    if(!found)
+                        position.pop();
+                }
+                i++;
+            }
+            return found;
+        }
+    }
+
+    getDataFromObject(object) {
+        let keys = Object.keys(object);
+        if(keys[0] === "rec")
+            return object[keys[1]];
+        return object[keys[0]];
     }
 
 }
+
+//http://bl.ocks.org/d3noob/8329447
