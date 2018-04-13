@@ -6,7 +6,7 @@ class Algorithm {
         this.colums = titles.length;
         this.resultName = this.titles[this.colums - 1];
         this.parseInitData(data);
-        this.start();
+        this.start(); 
     }
 
     /*
@@ -112,10 +112,9 @@ class Algorithm {
     start() {
         let min = this.doID3(this.parsedData);
         let branches = this.getBranchesFromMin(min, this.parsedData);
-        this.tree = {};
-        this.tree[min] = this.setTree(branches, min, this.parsedData);
+        this.tree = this.setTree(branches, min, this.parsedData);
         let position = [];  //almacenamos las claves del arbol para llegar a rec
-        let parsedData = this.chekIfRecExists(this.tree, position); 
+        let parsedData = this.checkIfRecExists(this.tree, position); 
         position = position.reverse();
         while(parsedData){
             let min = this.doID3(parsedData);
@@ -123,7 +122,7 @@ class Algorithm {
             let treeBranch = this.setTree(branches, min, parsedData);
             this.setATreeBranchInPosition(this.tree, treeBranch, position)
             position = [];
-            parsedData = this.chekIfRecExists(this.tree, position);
+            parsedData = this.checkIfRecExists(this.tree, position);
             position = position.reverse();
         }
         console.log(this.tree);
@@ -176,25 +175,26 @@ class Algorithm {
     //Vamos a añadir un objeto a los rec
     setTree(branches, min, parsedData){
         let res = {};
+        res[min] = {};
         let keys = Object.keys(branches);
         keys.forEach((k, index) => {
             let result = Object.keys(branches[k]);
             if(result.length > 1){
-                res[k] = {};
-                res[k].parsedData = this.setNewParsedData(min, k, result[0], parsedData); 
-                res[k].rec = true;
+                res[min][k] = {};
+                res[min][k].parsedData = this.setNewParsedData(min, k, parsedData); 
+                res[min][k].rec = true;
             }
             else //length == 1 -> o si o no
-                res[k] = result[0];
+                res[min][k] = result[0];
             
         });
         return res;
     }
 
-    setNewParsedData(key, value, res, parsedData){
+    setNewParsedData(key, value, parsedData){
         let result = [];
         parsedData.forEach((data, index) => {
-            if(data[this.resultName] !== res || data[key] !== value){
+            if(data[key] === value){
                 let dataKeys = Object.keys(data);
                 let pushThis = {};
                 dataKeys.forEach(dataKey => {
@@ -208,7 +208,7 @@ class Algorithm {
     }
 
     //Recorremos el arbol, y para quellos que tengan el atributo rec a true devolvemos los datos preparados
-    chekIfRecExists(object, position){
+    checkIfRecExists(object, position){
         if(typeof(object) !== "object")
             return false;
         else{
@@ -224,7 +224,7 @@ class Algorithm {
                 }
                 else{
                     position.push(keys[i]);
-                    found = this.chekIfRecExists(item, position);
+                    found = this.checkIfRecExists(item, position);
                     if(!found)
                         position.pop();
                 }
@@ -244,3 +244,4 @@ class Algorithm {
 }
 
 //http://bl.ocks.org/d3noob/8329447
+//http://visjs.org/docs/network/
