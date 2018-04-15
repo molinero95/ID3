@@ -19,7 +19,8 @@
     flex-direction: column;
     padding-top: 1em;
     padding-bottom: 1em;
-    background: lightgray;
+    background: #09B2A7;
+    color: white;
     border-right: black solid 3px;
     min-height: 80%;
     height: 100%;
@@ -85,11 +86,10 @@ hr{
 #resultado{
     position: fixed;
     bottom: 0px;
-    height: 200px;
+    height: 100%;
     width: 100%;
-    background: #959595;
-    color: white;
-    
+    background: #09B2A7;
+    color: white; 
 }
 
 .borderTWhite{
@@ -97,23 +97,21 @@ hr{
     height: 3rem;
     padding: 0;
     margin: 0;
-
-    border-bottom: gray solid 2px;
-    border-top:black solid 3px;
 }
 
 #resultText{
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 90%;
     background: white;
     margin-top: 3px;
+    border: black 2px solid;    
 }
 
 .title{
     padding-left: 2rem;
-    padding-top: 3px;
-    background: #959595;
-    color: black;
+    padding-top: 5px;
+    background: #09B2A7;
+    color: white;
 }
 
 .resultFondo{
@@ -161,4 +159,14 @@ tr{
 #plusMinBtns{
     display: flex;
     justify-content: space-around;
+}
+
+.btn-primary{
+    background: lightgray !important;
+    color:black !important;
+    border: black solid 1px !important;
+}
+
+#titleRigth {
+    color: #09B2A7;
 }

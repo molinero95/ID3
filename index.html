@@ -3,13 +3,17 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vis.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script src="vis.min.js"></script>
+    <script src="tree.js" charset="UTF-8"></script>
     <script src="algorithm.js" charset="UTF-8"></script>
     <script src="index.js" charset="UTF-8"></script>
+
 </head>
 <!--Prueba git-->
 
@@ -43,7 +47,7 @@
             </div>
             <!--Aqui ira la tabla-->
             <div class="col-md-9" id="bodyRight">
-                <h1>Tabla</h1>
+                <h1 id="titleRigth">Tabla</h1>
                 <hr>
                 <div class="container" id="tableC">
 
@@ -62,19 +66,10 @@
             </div>
         </div>
         <div class="row" id="resultado">
-            <h3 class="title borderTWhite">Resultado: </h3>
-            <div class="resultNoTitle">
-                <div class="resultFondo">
+            <h1 class="title borderTWhite">Resultado: </h3>
+            <div class="container" id="resultText">
 
-                </div>
-                <div class="col-md-11" id="resultText">
-                    halo
-                </div>
-                <div class="resultFondo">
-
-                </div>
             </div>
-
         </div>
     </div>
     <button id="resBtn" class="btn btn-primary">Resultado</button>

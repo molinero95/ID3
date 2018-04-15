@@ -125,8 +125,10 @@ class Algorithm {
             parsedData = this.checkIfRecExists(this.tree, position);
             position = position.reverse();
         }
-        console.log(this.tree);
+        let paintTree = new Tree(this.tree);
+        paintTree.paint("resultText");
     }
+
 
     doID3(parsedData){
         let p = this.getP(parsedData);

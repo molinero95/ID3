@@ -22,13 +22,12 @@ function readFiles(event) {
         alert("Introduzca sólo archivos .txt");
     else {
         let fr = new FileReader();
-        //CUIDADO AQUI con el titulo. Comprobar que las columnas coinciden con los titulos
         let titlesStr;
         let contentStr;
-        fr.readAsText(file1);
+        fr.readAsText(file1, 'ISO-8859-1');
         fr.onload = function () {
             titlesStr = this.result;
-            fr.readAsText(file2);
+            fr.readAsText(file2, 'ISO-8859-1');
             fr.onload = function () {
                 contentStr = this.result;
                 titles = parse(titlesStr);
@@ -43,7 +42,6 @@ function readFiles(event) {
         }
 
     }
-    //fr.readAsText()
 }
 
 function createEmptyTable() {
@@ -55,7 +53,6 @@ function createEmptyTable() {
         $("table").remove();
         $("#tableC").append("<table></table>");
         $("table").addClass("table table-condensed");
-
         setTableTitle(cols);
         setTableData(rows, cols);
     }
@@ -68,6 +65,8 @@ function createTableFromFile(titles, content) {
         alert("Introduzca los datos correctamente");
     else {
         $("table").remove();
+        $("#rows").val(rows);
+        $("#cols").val(cols);
         $("#tableC").append("<table></table>");
         $("table").addClass("table table-condensed");
         setTableTitle(cols, titles);
@@ -99,7 +98,7 @@ function setTableTitle(columns, data) {
             header.addClass("cell");
             let text = $("<input type=text placeholder=Titulo>");
             text.addClass("tableTitle");
-            text.val(data[i]);
+            text.val(data[i].trim());
             header.append(text);
             headerHead.append(header);
         }
@@ -109,6 +108,8 @@ function setTableTitle(columns, data) {
             let header = $("<th></th>");
             header.addClass("cell");
             let text = $("<input type=text placeholder=Titulo>");
+            if(i === columns - 1)
+                    text= $("<input type=text placeholder=Respuesta>");
             text.addClass("tableTitle");
             header.append(text);
             headerHead.append(header);
@@ -127,7 +128,7 @@ function setTableData(rows, columns, data) {
                 let cell = $("<td></td>");
                 cell.addClass("cell");
                 let text = $("<input type=text placeholder=Dato>");
-                text.val(data[i * columns + j]);
+                text.val(data[i * columns + j].trim());
                 cell.append(text);
                 headerRow.append(cell);
             }
@@ -142,6 +143,8 @@ function setTableData(rows, columns, data) {
                 let cell = $("<td></td>");
                 cell.addClass("cell");
                 let text = $("<input type=text placeholder=Dato>");
+                if(j === columns - 1)
+                    text= $("<input type=text placeholder=Si/No>");
                 cell.append(text);
                 headerRow.append(cell);
             }
@@ -156,7 +159,9 @@ function addTableRow(columns) {
     for (let j = 0; j < columns; j++) {
         let cell = $("<td></td>");
         cell.addClass("cell");
-        let text = $("<input type=text placeholder=dato>");
+        let text = $("<input type=text placeholder=Dato>");
+        if(j === columns - 1)
+            text= $("<input type=text placeholder=Si/No>");
         cell.append(text);
         headerRow.append(cell);
     }
@@ -177,23 +182,28 @@ function removeTableColumn() {
         $("th").last().remove();
         $("tr").each((ind, data) => {
             $(data.lastChild).remove();
+            $($($(data)[0].lastChild)[0].lastChild).attr("placeholder", "Si/No");
         });
+        $($($("thead")[0].lastChild)[0].lastChild).attr("placeholder", "Respuesta");
+
     }
 }
 
 function addTableColumn() {
     //Añadimos cabecera
     let cell = $("<th></th>");
+    $($($("thead")[0].lastChild)[0].lastChild).attr("placeholder", "Titulo");
     cell.addClass("cell");
-    let text = $("<input type=text placeholder=Titulo>");
+    let text = $("<input type=text placeholder=Respuesta>");
     text.addClass("tableTitle");
     cell.append(text);
     $("thead").append(cell);
     //Añadimos el resto
     $("tr").each((ind, data) => {
+        $($($(data)[0].lastChild)[0].lastChild).attr("placeholder", "Dato");
         let cell = $("<td></td>");
         cell.addClass("cell");
-        let text = $("<input type=text placeholder=Dato>");
+        let text = $("<input type=text placeholder=Si/No>");
         cell.append(text);
         $(data).append(cell);
     });
@@ -201,15 +211,17 @@ function addTableColumn() {
 
 
 function parse(text) {
+    text= text.trim();
     text = text.replace(/(\r\n|\n|\r)/gm, ":");
     let split = text.split(":");
     let result = [];
     split.forEach(element => {
-        if (element.length > 0) result = result.concat(element.split(","));
+        if (element.length > 0){
+            let data = element.split(",");
+            data.forEach((d, index) => data[index] = d.trim().replace(/\s/g,''));
+            result = result.concat(data);
+    }
     });
-    /*split.forEach((element, index) => {
-        split[index] = element.replace(/(\r\n|\n|\r)/gm,"");
-    });*/
     return result;
 }
 
@@ -222,18 +234,19 @@ function checkIfCorrect(title, content) {
 function showHideResult() {
     let div = $("#resultado");
     if (!div.is(":visible")) {
-        div.show();
-        div.prop("display", "visible");
         if(!titles || !content)
-            alert("esto ira en la consola");
-            //mostrar texto en resultado, usar funcion
+            alert("No hay datos");
         else {
             let id3 = new Algorithm(titles, content);
+            div.show();
+            div.prop("display", "visible");
+            $("#resBtn").text("Cerrar").removeClass("btn-primary").addClass("btn-secondary");
+
         }
     }
     else {
         div.hide();
         div.prop("display", "visible");
-
+        $("#resBtn").text("Resultado").removeClass("btn-secondary").addClass("btn-primary");
     }
 }
