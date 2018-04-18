@@ -38,13 +38,13 @@ function getContent(){
                 let header = $("<th></th>");
                 header.addClass("cell");
                 let text = $("<input type=text placeholder=Titulo>");
-                text.change(() =>{
-                    changes = true;
-                })
                 text.addClass("tableTitle");
                 text.val(data[i].trim());
                 header.append(text);
                 headerHead.append(header);
+                text.change(function() {
+                    changes = true;
+                })
             }
         }
         else {   //creado a mano
@@ -57,6 +57,9 @@ function getContent(){
                 text.addClass("tableTitle");
                 header.append(text);
                 headerHead.append(header);
+                text.change(function() {
+                    changes = true;
+                })
             }
         }
         $("table").append(headerHead);
@@ -78,6 +81,9 @@ function getContent(){
                     text.val(data[i * columns + j].trim());
                     cell.append(text);
                     headerRow.append(cell);
+                    text.change(function() {
+                        changes = true;
+                    })
                 }
                 $("table").append(headerRow);
             }
@@ -94,6 +100,9 @@ function getContent(){
                         text= $("<input type=text placeholder=Si/No>");
                     cell.append(text);
                     headerRow.append(cell);
+                    text.change(function() {
+                        changes = true;
+                    })
                 }
                 $("table").append(headerRow);
             }
