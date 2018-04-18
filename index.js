@@ -12,6 +12,8 @@ $(() => {
 
 let titles;
 let content;
+let changes = true;
+let completed = false;
 
 function readFiles(event) {
     let file1 = $("#file1").prop("files")[0];
@@ -44,171 +46,6 @@ function readFiles(event) {
     }
 }
 
-function createEmptyTable() {
-    let rows = Number($("#rows").val());
-    let cols = Number($("#cols").val());
-    if (isNaN(rows) || isNaN(cols) || rows === 0 || cols === 0)
-        alert("Introduzca los datos correctamente");
-    else {
-        $("table").remove();
-        $("#tableC").append("<table></table>");
-        $("table").addClass("table table-condensed");
-        setTableTitle(cols);
-        setTableData(rows, cols);
-    }
-}
-
-function createTableFromFile(titles, content) {
-    let rows = Number(content.length / titles.length + 1);  //+1 por los titulos
-    let cols = Number(titles.length);
-    if (isNaN(rows) || isNaN(cols) || rows === 0 || cols === 0)
-        alert("Introduzca los datos correctamente");
-    else {
-        $("table").remove();
-        $("#rows").val(rows);
-        $("#cols").val(cols);
-        $("#tableC").append("<table></table>");
-        $("table").addClass("table table-condensed");
-        setTableTitle(cols, titles);
-        setTableData(rows, cols, content);
-    }
-}
-
-function addRow() {
-    $("#rows").prop("value", Number($("#rows").val()) + 1);
-    addTableRow(Number($("#cols").val()))
-}
-function delRow() {
-    removeTableRow();
-}
-function addColumn() {
-    $("#cols").prop("value", Number($("#cols").val()) + 1);
-    addTableColumn();
-}
-function delColumn() {
-    removeTableColumn();
-}
-
-
-function setTableTitle(columns, data) {
-    let headerHead = $("<thead></thead>")
-    if (data) {   //leido desde archivo
-        for (let i = 0; i < columns; i++) {
-            let header = $("<th></th>");
-            header.addClass("cell");
-            let text = $("<input type=text placeholder=Titulo>");
-            text.addClass("tableTitle");
-            text.val(data[i].trim());
-            header.append(text);
-            headerHead.append(header);
-        }
-    }
-    else {   //creado a mano
-        for (let i = 0; i < columns; i++) {
-            let header = $("<th></th>");
-            header.addClass("cell");
-            let text = $("<input type=text placeholder=Titulo>");
-            if(i === columns - 1)
-                    text= $("<input type=text placeholder=Respuesta>");
-            text.addClass("tableTitle");
-            header.append(text);
-            headerHead.append(header);
-        }
-    }
-    $("table").append(headerHead);
-
-}
-
-function setTableData(rows, columns, data) {
-    if (data) {
-        for (let i = 0; i < rows - 1; i++) {
-            let headerRow = $("<tr></tr>");
-            headerRow.addClass("tableRow");
-            for (let j = 0; j < columns; j++) {
-                let cell = $("<td></td>");
-                cell.addClass("cell");
-                let text = $("<input type=text placeholder=Dato>");
-                text.val(data[i * columns + j].trim());
-                cell.append(text);
-                headerRow.append(cell);
-            }
-            $("table").append(headerRow);
-        }
-    }
-    else {
-        for (let i = 0; i < rows - 1; i++) {
-            let headerRow = $("<tr></tr>");
-            headerRow.addClass("tableRow");
-            for (let j = 0; j < columns; j++) {
-                let cell = $("<td></td>");
-                cell.addClass("cell");
-                let text = $("<input type=text placeholder=Dato>");
-                if(j === columns - 1)
-                    text= $("<input type=text placeholder=Si/No>");
-                cell.append(text);
-                headerRow.append(cell);
-            }
-            $("table").append(headerRow);
-        }
-    }
-
-}
-
-function addTableRow(columns) {
-    let headerRow = $("<tr></tr>");
-    for (let j = 0; j < columns; j++) {
-        let cell = $("<td></td>");
-        cell.addClass("cell");
-        let text = $("<input type=text placeholder=Dato>");
-        if(j === columns - 1)
-            text= $("<input type=text placeholder=Si/No>");
-        cell.append(text);
-        headerRow.append(cell);
-    }
-    $("table").append(headerRow);
-
-}
-
-function removeTableRow() {
-    if (Number($("#rows").val()) > 4) {
-        $("tr").last().remove();
-        $("#rows").prop("value", Number($("#rows").val()) - 1);
-    }
-}
-
-function removeTableColumn() {
-    if (Number($("#cols").val()) > 4) {
-        $("#cols").prop("value", Number($("#cols").val()) - 1);
-        $("th").last().remove();
-        $("tr").each((ind, data) => {
-            $(data.lastChild).remove();
-            $($($(data)[0].lastChild)[0].lastChild).attr("placeholder", "Si/No");
-        });
-        $($($("thead")[0].lastChild)[0].lastChild).attr("placeholder", "Respuesta");
-
-    }
-}
-
-function addTableColumn() {
-    //Añadimos cabecera
-    let cell = $("<th></th>");
-    $($($("thead")[0].lastChild)[0].lastChild).attr("placeholder", "Titulo");
-    cell.addClass("cell");
-    let text = $("<input type=text placeholder=Respuesta>");
-    text.addClass("tableTitle");
-    cell.append(text);
-    $("thead").append(cell);
-    //Añadimos el resto
-    $("tr").each((ind, data) => {
-        $($($(data)[0].lastChild)[0].lastChild).attr("placeholder", "Dato");
-        let cell = $("<td></td>");
-        cell.addClass("cell");
-        let text = $("<input type=text placeholder=Si/No>");
-        cell.append(text);
-        $(data).append(cell);
-    });
-}
-
 
 function parse(text) {
     text= text.trim();
@@ -231,17 +68,23 @@ function checkIfCorrect(title, content) {
         return true;
     return false;
 }
+
+
 function showHideResult() {
     let div = $("#resultado");
+    getDataFromTable();
     if (!div.is(":visible")) {
-        if(!titles || !content)
+        if(!completed)
             alert("No hay datos");
         else {
-            let id3 = new Algorithm(titles, content);
+            if(changes){
+                new Algorithm(titles, content);
+                changes = false;
+            }
             div.show();
             div.prop("display", "visible");
             $("#resBtn").text("Cerrar").removeClass("btn-primary").addClass("btn-secondary");
-
+            
         }
     }
     else {
@@ -250,3 +93,5 @@ function showHideResult() {
         $("#resBtn").text("Resultado").removeClass("btn-secondary").addClass("btn-primary");
     }
 }
+
+
