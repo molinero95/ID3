@@ -7,6 +7,7 @@ $(() => {
     $("#plusCBtn").on("click", addColumn);
     $("#minRBtn").on("click", delRow);
     $("#minCBtn").on("click", delColumn);
+    $("#queryBtn").on("click", queryResult);
     createEmptyTable();
 })
 
@@ -14,6 +15,7 @@ let titles;
 let content;
 let changes = true;
 let completed = false;
+let alg = null;
 
 function readFiles(event) {
     let file1 = $("#file1").prop("files")[0];
@@ -23,6 +25,7 @@ function readFiles(event) {
     if (String(ext1).toLowerCase() !== "txt" || String(ext2).toLowerCase() !== "txt")
         alert("Introduzca sólo archivos .txt");
     else {
+        changes = true;
         let fr = new FileReader();
         let titlesStr;
         let contentStr;
@@ -55,7 +58,7 @@ function parse(text) {
     split.forEach(element => {
         if (element.length > 0){
             let data = element.split(",");
-            data.forEach((d, index) => data[index] = d.trim().replace(/\s/g,''));
+            data.forEach((d, index) => data[index] = d.trim());
             result = result.concat(data);
     }
     });
@@ -78,20 +81,51 @@ function showHideResult() {
             alert("No hay datos");
         else {
             if(changes){
-                new Algorithm(titles, content);
+                alg = new Algorithm(titles, content);
                 changes = false;
             }
             div.show();
             div.prop("display", "visible");
             $("#resBtn").text("Cerrar").removeClass("btn-primary").addClass("btn-secondary");
-            
+            setLabelsAndInputs();
+
         }
     }
     else {
         div.hide();
         div.prop("display", "visible");
         $("#resBtn").text("Resultado").removeClass("btn-secondary").addClass("btn-primary");
+        removeLabelsAndInputs();
     }
 }
 
 
+function setLabelsAndInputs(){
+    let button = $("#queryBtn");
+    for(let i = 0; i < titles.length - 1; i++){
+        let div = $("<div></div>");
+        div.addClass("queryDiv");
+        let label = $("<label></label>");
+        let input = $("<input type=text placeholder=Respuesta>");
+        label.text(titles[i]);
+        div.append(label);
+        div.append(input);
+        button.before(div);
+    }
+}
+
+
+function removeLabelsAndInputs(){
+    $(".queryDiv").each(function(index, item){
+        $(item).remove();
+    });
+}
+
+
+function queryResult(){
+    let data = {};
+    $(".queryDiv input").each(function(index, item){
+        data[titles[index]] = $(item).val().toLowerCase().trim();
+    });
+    alert(alg.getResultFromData(data));
+}

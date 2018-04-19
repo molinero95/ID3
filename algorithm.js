@@ -6,7 +6,7 @@ class Algorithm {
         this.colums = titles.length;
         this.resultName = this.titles[this.colums - 1];
         this.parseInitData(data);
-        this.start(); 
+        this.start();
     }
 
     /*
@@ -92,9 +92,9 @@ class Algorithm {
     }
 
     infor(p, n) {   //falta separar por num y denom
-        if(p === 0)
+        if (p === 0)
             p = 1;
-        if(n === 0)
+        if (n === 0)
             n = 1;
         return -p * Math.log2(p) - n * Math.log2(n);
     }
@@ -114,9 +114,9 @@ class Algorithm {
         let branches = this.getBranchesFromMin(min, this.parsedData);
         this.tree = this.setTree(branches, min, this.parsedData);
         let position = [];  //almacenamos las claves del arbol para llegar a rec
-        let parsedData = this.checkIfRecExists(this.tree, position); 
+        let parsedData = this.checkIfRecExists(this.tree, position);
         position = position.reverse();
-        while(parsedData){
+        while (parsedData) {
             let min = this.doID3(parsedData);
             let branches = this.getBranchesFromMin(min, parsedData);
             let treeBranch = this.setTree(branches, min, parsedData);
@@ -130,7 +130,7 @@ class Algorithm {
     }
 
 
-    doID3(parsedData){
+    doID3(parsedData) {
         let p = this.getP(parsedData);
         let n = this.getN(p);
         let r = this.getR(p, n);
@@ -138,34 +138,34 @@ class Algorithm {
         let min = null;
         Object.keys(p).forEach(elem => {
             merit[elem] = this.getMerit(r[elem], p[elem], n[elem]);
-            if(min === null)
+            if (min === null)
                 min = elem;
-            else if(merit[min] > merit[elem]){
+            else if (merit[min] > merit[elem]) {
                 min = elem;
             }
         });
         return min;
     }
 
-    setATreeBranchInPosition(treePosition, treeBranch, position){
-        if(position.length > 1){    //accedemos a la posicion
+    setATreeBranchInPosition(treePosition, treeBranch, position) {
+        if (position.length > 1) {    //accedemos a la posicion
             let key = position.pop();
             this.setATreeBranchInPosition(treePosition[key], treeBranch, position);
         }
-        else if(position.length == 1){
+        else if (position.length == 1) {
             let key = position.pop();
             treePosition[key] = treeBranch
         }
     }
 
-    getBranchesFromMin(min, parsedData){
+    getBranchesFromMin(min, parsedData) {
         let branches = {};
         parsedData.forEach(data => {
             let res = data[this.resultName];
             let dat = [data[min]];
-            if(!branches[dat])
+            if (!branches[dat])
                 branches[dat] = {};
-            if(!branches[dat][res]){
+            if (!branches[dat][res]) {
                 branches[dat][res] = 0;
                 branches[dat][res]++;
             }
@@ -175,32 +175,32 @@ class Algorithm {
 
     //Vamos generando el arbol y borrando los elementos de parsedData
     //Vamos a añadir un objeto a los rec
-    setTree(branches, min, parsedData){
+    setTree(branches, min, parsedData) {
         let res = {};
         res[min] = {};
         let keys = Object.keys(branches);
         keys.forEach((k, index) => {
             let result = Object.keys(branches[k]);
-            if(result.length > 1){
+            if (result.length > 1) {
                 res[min][k] = {};
-                res[min][k].parsedData = this.setNewParsedData(min, k, parsedData); 
+                res[min][k].parsedData = this.setNewParsedData(min, k, parsedData);
                 res[min][k].rec = true;
             }
             else //length == 1 -> o si o no
                 res[min][k] = result[0];
-            
+
         });
         return res;
     }
 
-    setNewParsedData(key, value, parsedData){
+    setNewParsedData(key, value, parsedData) {
         let result = [];
         parsedData.forEach((data, index) => {
-            if(data[key] === value){
+            if (data[key] === value) {
                 let dataKeys = Object.keys(data);
                 let pushThis = {};
                 dataKeys.forEach(dataKey => {
-                    if(dataKey !== key)
+                    if (dataKey !== key)
                         pushThis[dataKey] = data[dataKey];
                 })
                 result.push(pushThis);
@@ -210,24 +210,24 @@ class Algorithm {
     }
 
     //Recorremos el arbol, y para quellos que tengan el atributo rec a true devolvemos los datos preparados
-    checkIfRecExists(object, position){
-        if(typeof(object) !== "object")
+    checkIfRecExists(object, position) {
+        if (typeof (object) !== "object")
             return false;
-        else{
+        else {
             let keys = Object.keys(object);
             let i = 0;
             let found = false;
-            while(i < keys.length && !found) {
+            while (i < keys.length && !found) {
                 let item = object[keys[i]];
-                if(item.rec){
+                if (item.rec) {
                     position.push(keys[i]);
                     found = this.getDataFromObject(item);
                     item.rec = false;
                 }
-                else{
+                else {
                     position.push(keys[i]);
                     found = this.checkIfRecExists(item, position);
-                    if(!found)
+                    if (!found)
                         position.pop();
                 }
                 i++;
@@ -238,9 +238,36 @@ class Algorithm {
 
     getDataFromObject(object) {
         let keys = Object.keys(object);
-        if(keys[0] === "rec")
+        if (keys[0] === "rec")
             return object[keys[1]];
         return object[keys[0]];
+    }
+
+    getResultFromData(data) {
+        let result = false;
+        let key;
+        let val;
+        let branch = this.tree;
+        let treeKeys;
+        while (!result) {
+            if (typeof (branch) === "object") {
+                treeKeys = Object.keys(branch);
+                if (treeKeys.length === 1) {
+                    key = treeKeys[0];
+                    val = data[key];
+                    branch = branch[key];
+                }
+                else {   //varias opciones en el arbol, respuestas posibles, buscamos la del input
+                    key = val;
+                    branch = branch[key];
+                    if(typeof(branch) !== "object"){
+                        result = true;
+                        val = branch;
+                    }
+                }
+            }
+        }
+        return val;
     }
 
 }

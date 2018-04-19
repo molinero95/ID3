@@ -90,6 +90,9 @@ hr{
     width: 100%;
     background: #09B2A7;
     color: white; 
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
 }
 
 .borderTWhite{
@@ -101,10 +104,17 @@ hr{
 
 #resultText{
     height: 90%;
-    width: 90%;
+    width: 65%;
     background: white;
     margin-top: 3px;
     border: black 2px solid;    
+    margin-left: 3rem;
+    margin-right: 3rem;
+
+}
+#resultQuery{
+    color: white;
+    width: 25%;
 }
 
 .title{
@@ -169,4 +179,16 @@ tr{
 
 #titleRigth {
     color: #09B2A7;
+}
+
+.queryDiv{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 1rem;
+}
+
+#queryBtn{
+    margin-top: 2rem;
+    width: 100%;
 }
