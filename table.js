@@ -30,6 +30,7 @@ function addTableRow(columns) {
         cell.append(text);
         headerRow.append(cell);
     }
+    changes = true;
     $("table").append(headerRow);
 }
 
@@ -40,6 +41,7 @@ function removeTableRow() {
         $("tr").last().remove();
         $("#rows").prop("value", Number($("#rows").val()) - 1);
     }
+    changes = true;
 }
 
 //Añade una columna a la tabla por la derecha, modificando la columna resultado
@@ -61,6 +63,7 @@ function addTableColumn() {
         cell.append(text);
         $(data).append(cell);
     });
+    changes = true;
 }
 
 //Borra una columna de la tabla por la derecha, cambiando la columna de resultado a la anterior
@@ -73,6 +76,7 @@ function removeTableColumn() {
             $($($(data)[0].lastChild)[0].lastChild).attr("placeholder", "Si/No");
         });
         $($($("thead")[0].lastChild)[0].lastChild).attr("placeholder", "Respuesta");
+        changes = true;
     }
 }
 
@@ -92,6 +96,7 @@ function createEmptyTable() {
         $("table").addClass("table table-condensed");
         setTableTitle(cols);
         setTableData(rows, cols);
+        changes = true;
     }
 }
 
@@ -110,6 +115,7 @@ function createTableFromFile(titles, content) {
         setTableTitle(cols, titles);
         setTableData(rows, cols, content);
     }
+    changes = true;
 }
 
 
